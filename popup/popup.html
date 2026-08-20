@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Readapt</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="brand">
+    <h1>Readapt</h1>
+    <label class="switch" title="Activer / désactiver Readapt">
+      <input type="checkbox" id="enabled">
+      <span class="slider"></span>
+    </label>
+  </header>
+
+  <main>
+    <section class="field">
+      <label for="font">Police</label>
+      <select id="font">
+        <option value="opendyslexic">OpenDyslexic</option>
+        <option value="arial">Arial</option>
+        <option value="verdana">Verdana</option>
+        <option value="none">Police d'origine</option>
+      </select>
+    </section>
+
+    <section class="field">
+      <label for="fontSize">Taille du texte <output id="fontSizeOut">100 %</output></label>
+      <input type="range" id="fontSize" min="90" max="160" step="5">
+    </section>
+
+    <section class="field">
+      <label for="letterSpacing">Espacement des lettres <output id="letterSpacingOut">0.05 em</output></label>
+      <input type="range" id="letterSpacing" min="0" max="0.3" step="0.01">
+    </section>
+
+    <section class="field">
+      <label for="wordSpacing">Espacement des mots <output id="wordSpacingOut">0.15 em</output></label>
+      <input type="range" id="wordSpacing" min="0" max="0.6" step="0.05">
+    </section>
+
+    <section class="field">
+      <label for="lineHeight">Hauteur de ligne <output id="lineHeightOut">1.8</output></label>
+      <input type="range" id="lineHeight" min="1.2" max="2.6" step="0.1">
+    </section>
+
+    <section class="field row">
+      <label for="ruler">Règle de lecture</label>
+      <label class="switch small">
+        <input type="checkbox" id="ruler">
+        <span class="slider"></span>
+      </label>
+    </section>
+
+    <section class="field row">
+      <label for="siteToggle">Désactiver sur ce site</label>
+      <label class="switch small">
+        <input type="checkbox" id="siteToggle">
+        <span class="slider"></span>
+      </label>
+    </section>
+  </main>
+
+  <footer>
+    <button id="reset" type="button">Réinitialiser</button>
+    <a href="https://www.readapt.mobi" target="_blank" rel="noopener">readapt.mobi</a>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
