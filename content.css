@@ -1,0 +1,62 @@
+/* Readapt – styles appliqués quand data-readapt="on" est présent sur <html>. */
+
+html[data-readapt="on"] body,
+html[data-readapt="on"] body p,
+html[data-readapt="on"] body li,
+html[data-readapt="on"] body span,
+html[data-readapt="on"] body a,
+html[data-readapt="on"] body td,
+html[data-readapt="on"] body th,
+html[data-readapt="on"] body h1,
+html[data-readapt="on"] body h2,
+html[data-readapt="on"] body h3,
+html[data-readapt="on"] body h4,
+html[data-readapt="on"] body h5,
+html[data-readapt="on"] body h6,
+html[data-readapt="on"] body blockquote,
+html[data-readapt="on"] body label,
+html[data-readapt="on"] body figcaption {
+  letter-spacing: var(--readapt-letter-spacing, 0.05em) !important;
+  word-spacing: var(--readapt-word-spacing, 0.15em) !important;
+  line-height: var(--readapt-line-height, 1.8) !important;
+}
+
+html[data-readapt="on"][data-readapt-font="on"] body,
+html[data-readapt="on"][data-readapt-font="on"] body * {
+  font-family: var(--readapt-font) !important;
+}
+
+html[data-readapt="on"] {
+  font-size: var(--readapt-font-size, 100%) !important;
+}
+
+/* Preserve code and common icon-font elements. */
+html[data-readapt="on"] body pre,
+html[data-readapt="on"] body code,
+html[data-readapt="on"] body kbd,
+html[data-readapt="on"] body samp,
+html[data-readapt="on"] body [class*="icon"],
+html[data-readapt="on"] body [class*="fa-"] {
+  font-family: revert !important;
+  letter-spacing: normal !important;
+  word-spacing: normal !important;
+}
+
+#readapt-ruler {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: var(--readapt-ruler-top, 40vh);
+  height: var(--readapt-ruler-height, 32px);
+  pointer-events: none;
+  z-index: 2147483647;
+  background: rgba(255, 196, 87, 0.22);
+  border-top: 2px solid rgba(13, 115, 119, 0.55);
+  border-bottom: 2px solid rgba(13, 115, 119, 0.55);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #readapt-ruler {
+    transition: top 60ms linear;
+  }
+}
