@@ -69,6 +69,7 @@ Provides the extension interface used to configure and persist reading preferenc
 The extension uses:
 
 - `storage` to save and synchronize accessibility preferences.
+- `activeTab` so the popup can identify the current website when the user chooses to disable Readapt for that site.
 - `<all_urls>` because the core purpose of the extension is to adapt the appearance of web pages the user visits.
 
 Readapt does not require a remote AI API or embed an OpenAI API key in the extension.
