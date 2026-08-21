@@ -4,6 +4,15 @@
 
 Readapt Chrome Extension brings Readapt's accessibility approach directly into the browser. It lets users adapt the typography and reading layout of almost any web page without leaving the page they are reading.
 
+## Readapt Ecosystem
+
+Readapt is built as an accessibility ecosystem with two complementary products:
+
+- **Readapt Web** — an AI-powered Rails application for adapting text, processing PDFs and images, generating audio and supporting synchronized assisted reading.
+- **Readapt Chrome Extension** — this extension brings accessibility settings directly to websites while users browse.
+
+Main Readapt Web repository: https://github.com/TonyLawrence85/readapt
+
 ## Features
 
 - Enable or disable Readapt globally
@@ -21,7 +30,7 @@ Readapt Chrome Extension brings Readapt's accessibility approach directly into t
 
 The Readapt web application helps users transform and consume accessible content. The Chrome extension complements it by bringing reading adaptations to existing websites, reducing the need to copy content into another application.
 
-Together, they form part of the broader Readapt accessibility ecosystem.
+Together, they form the broader Readapt accessibility ecosystem.
 
 ## Tech Stack
 
@@ -53,15 +62,12 @@ readapt-chrome-extension/
 ```
 
 ### `content.js`
-
 Applies the user's accessibility preferences to the current page and manages the reading ruler.
 
 ### `content.css`
-
 Defines the accessibility styles injected into supported web pages and loads the bundled OpenDyslexic font.
 
 ### `popup/`
-
 Provides the extension interface used to configure and persist reading preferences.
 
 ## Permissions
@@ -88,11 +94,11 @@ Until the extension is distributed through a browser store, it can be loaded loc
 
 The extension's reading preferences are stored using Chrome's synchronized storage. The extension does not need to send page content to an external AI service to provide its current accessibility features.
 
-## Relationship with Readapt
+## Relationship with Readapt Web
 
-This extension complements the main Readapt full-stack application, which provides AI-powered text adaptation, document processing and assisted reading features.
+The Chrome extension focuses on adapting existing web pages directly in the browser. The main Readapt application provides the deeper AI layer: content transformation, multimodal document processing, text-to-speech and synchronized reading.
 
-Main Readapt project: https://github.com/TonyLawrence85/readapt
+Explore Readapt Web: https://github.com/TonyLawrence85/readapt
 
 ## Future Improvements
 
