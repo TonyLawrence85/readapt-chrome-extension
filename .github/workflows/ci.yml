@@ -21,3 +21,7 @@ jobs:
         run: |
           node --check content.js
           find popup -type f -name '*.js' -print0 | xargs -0 -r -n1 node --check
+          find tests -type f -name '*.js' -print0 | xargs -0 -r -n1 node --check
+
+      - name: Run tests
+        run: node --test tests/*.test.js
