@@ -24,6 +24,19 @@ function referencedFiles(value, files = []) {
   return files;
 }
 
+function resourceExists(resource) {
+  if (!resource.includes("*")) return fs.existsSync(path.join(root, resource));
+
+  const directory = path.dirname(resource);
+  const pattern = path.basename(resource);
+  const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*");
+  const matcher = new RegExp(`^${escaped}$`, "i");
+  const directoryPath = path.join(root, directory);
+
+  return fs.existsSync(directoryPath) &&
+    fs.readdirSync(directoryPath).some((entry) => matcher.test(entry));
+}
+
 test("uses Manifest V3", () => {
   assert.equal(manifest.manifest_version, 3);
 });
@@ -37,6 +50,6 @@ test("all local files referenced by the manifest exist", () => {
   assert.ok(files.length > 0);
 
   for (const file of files) {
-    assert.ok(fs.existsSync(path.join(root, file)), `Missing manifest resource: ${file}`);
+    assert.ok(resourceExists(file), `Missing manifest resource: ${file}`);
   }
 });
