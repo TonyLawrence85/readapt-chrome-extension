@@ -1,5 +1,7 @@
 # Readapt Chrome Extension
 
+[![CI](https://github.com/TonyLawrence85/readapt-chrome-extension/actions/workflows/ci.yml/badge.svg)](https://github.com/TonyLawrence85/readapt-chrome-extension/actions/workflows/ci.yml)
+
 **Make any website easier to read.**
 
 Readapt Chrome Extension is a browser accessibility tool designed to make web reading more comfortable for people with dyslexia. It adapts typography and page layout directly in the browser, without requiring users to copy content into another application.
@@ -44,9 +46,7 @@ Preferences are persisted using `chrome.storage.sync`.
 
 The main Readapt web application transforms imported content into an assisted reading experience. The Chrome extension solves a different problem: much of what people read already exists on websites.
 
-Instead of moving that content into another application, Readapt can bring accessibility adjustments directly to the page being viewed.
-
-This makes the extension the browser-facing component of the broader Readapt ecosystem.
+Instead of moving that content into another application, Readapt brings accessibility adjustments directly to the page being viewed. This makes the extension the browser-facing component of the broader Readapt ecosystem.
 
 ## How it works
 
@@ -89,14 +89,15 @@ The popup acts as the control interface. Changes are stored through the Chrome E
 
 ## Tech Stack
 
-- JavaScript
-- HTML
-- CSS
-- Chrome Extensions API
-- Manifest V3
-- `chrome.storage.sync`
-- DOM manipulation
-- Dynamic CSS adaptation
+| Area | Technologies |
+| --- | --- |
+| Extension | Chrome Extensions API, Manifest V3 |
+| Frontend | JavaScript, HTML, CSS |
+| Persistence | `chrome.storage.sync` |
+| Page adaptation | DOM manipulation, CSS custom properties |
+| Accessibility | OpenDyslexic, configurable typography, reading ruler |
+| Testing | Node.js native test runner, `node:assert`, VM-based browser API mocks |
+| CI | GitHub Actions |
 
 ## Architecture
 
@@ -115,28 +116,35 @@ readapt-chrome-extension/
 │   ├── popup.html
 │   ├── popup.css
 │   └── popup.js
+├── tests/
+│   ├── manifest.test.js
+│   └── content.test.js
 └── docs/
     └── screenshots/
 ```
 
 ### `content.js`
 
-Applies the user's accessibility preferences to the current page and manages interactive behavior such as the reading ruler.
+Applies the user's accessibility preferences to the current page and manages interactive behavior such as the reading ruler. It also listens for synchronized preference changes and reapplies the profile without requiring a page reload.
 
 ### `content.css`
 
-Defines the accessibility styles applied to supported web content and loads the bundled OpenDyslexic font.
+Defines the accessibility styles applied to supported web content and supports the bundled OpenDyslexic font.
 
 ### `popup/`
 
 Provides the user interface for configuring, persisting and resetting reading preferences.
+
+### `tests/`
+
+Contains zero-dependency Node.js tests for manifest integrity and content-script behavior. A lightweight mocked DOM and Chrome API environment keeps tests fast and independent of a real browser.
 
 ## Permissions
 
 The extension uses:
 
 - `storage` to save and synchronize accessibility preferences.
-- `activeTab` so the popup can identify and interact with the current website when necessary.
+- `activeTab` so the popup can identify the current website when necessary.
 - `<all_urls>` because the extension's core purpose is to adapt web pages across the sites the user chooses to visit.
 
 Readapt does not require a remote AI service or expose an OpenAI API key in the browser extension.
@@ -146,6 +154,34 @@ Readapt does not require a remote AI service or expose an OpenAI API key in the 
 The current extension performs its accessibility adaptations locally in the browser. Reading preferences are stored through Chrome's synchronized storage.
 
 Page content does not need to be sent to the Readapt AI application or another remote AI service for the extension's current typography and layout features to work.
+
+## Testing and CI
+
+The repository includes **8 automated tests** executed by GitHub Actions on pushes and pull requests to `main`.
+
+The suite currently verifies:
+
+- Manifest V3 configuration
+- required storage permission
+- existence of local resources referenced by the manifest, including wildcard resources
+- no page adaptation while Readapt is disabled
+- typography and spacing preferences when Readapt is enabled
+- per-site disabling
+- live response to synchronized preference changes
+- creation, positioning and removal of the reading ruler
+
+The CI also validates `manifest.json` and performs JavaScript syntax checks before running the test suite.
+
+Run the same checks locally with:
+
+```bash
+python -m json.tool manifest.json > /dev/null
+node --check content.js
+find popup tests -type f -name '*.js' -print0 | xargs -0 -r -n1 node --check
+node --test tests/*.test.js
+```
+
+No npm package installation is required for the current test suite.
 
 ## Local Installation
 
@@ -160,13 +196,13 @@ Until the extension is distributed through the Chrome Web Store, it can be loade
 
 ## Readapt Ecosystem
 
-Readapt consists of two complementary products:
+Readapt consists of two complementary products.
 
 ### Readapt Web
 
 The AI-powered Rails application handles deeper content transformation, including text adaptation, PDF and image processing, text-to-speech and synchronized assisted reading.
 
-Repository: https://github.com/TonyLawrence85/readapt
+[Explore the Readapt Web repository](https://github.com/TonyLawrence85/readapt)
 
 ### Readapt Chrome Extension
 
@@ -174,9 +210,17 @@ This repository provides the browser accessibility layer, allowing users to appl
 
 Together, the two projects explore how AI-assisted content transformation and browser-level accessibility can complement each other in a single reading ecosystem.
 
+## Engineering Decisions
+
+**Keep page adaptation local.** The extension's current typography and layout features do not need a remote AI call. This reduces latency, avoids exposing API credentials in the browser and means page content does not need to leave the browser for these features.
+
+**Use synchronized preferences.** `chrome.storage.sync` allows the same reading profile to persist across browser sessions and lets the content script react to changes as they happen.
+
+**Keep testing lightweight.** The extension uses Node's built-in test runner instead of introducing a package manager and testing framework solely for a small test suite. Browser APIs and the DOM are mocked only to the extent required to exercise the content script's behavior.
+
 ## What This Project Demonstrates
 
-This extension demonstrates experience with browser extension development, JavaScript, DOM and CSS manipulation, Chrome APIs, persistent user preferences, accessibility-oriented interface design and product integration across a broader application ecosystem.
+This extension demonstrates browser extension development, JavaScript, DOM and CSS manipulation, Chrome APIs, persistent user preferences, Manifest V3, accessibility-oriented interface design, automated testing, CI and product integration across a broader application ecosystem.
 
 ## Future Improvements
 
@@ -185,14 +229,14 @@ This extension demonstrates experience with browser extension development, JavaS
 - Per-site configuration presets
 - Keyboard shortcuts
 - Additional reading ruler options
-- Automated browser tests
+- End-to-end tests in a real browser environment
 - Chrome Web Store packaging
 - Privacy documentation for store distribution
 - Improved compatibility testing across complex websites
 
 ## Project Status
 
-Readapt Chrome Extension is currently under active development and complements the main Readapt AI web application.
+Readapt Chrome Extension is under active development and complements the main Readapt AI web application.
 
 ## Author
 
@@ -201,7 +245,7 @@ Full-Stack & AI Software Developer
 
 Focus areas: Ruby on Rails, JavaScript, AI-powered web applications, OpenAI API integration, browser extensions and workflow automation.
 
-GitHub: https://github.com/TonyLawrence85
+[GitHub profile](https://github.com/TonyLawrence85)
 
 ## License
 
